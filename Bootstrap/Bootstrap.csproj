@@ -70,9 +70,6 @@
     <Compile Include="Structures.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TablessTabControl.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <EmbeddedResource Include="EditorControl.resx">
       <DependentUpon>EditorControl.cs</DependentUpon>
     </EmbeddedResource>

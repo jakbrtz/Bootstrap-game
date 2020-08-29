@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            this.tablessTabControl1 = new Bootstrap.TabControlWithoutHeader();
+            this.tabControl1 = new Bootstrap.TabControlWithoutHeader();
             this.Home = new System.Windows.Forms.TabPage();
             this.BTNhelp = new System.Windows.Forms.Button();
             this.BTNeditor = new System.Windows.Forms.Button();
@@ -56,7 +56,7 @@
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.label1 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.tablessTabControl1.SuspendLayout();
+            this.tabControl1.SuspendLayout();
             this.Home.SuspendLayout();
             this.SelectLevel.SuspendLayout();
             this.Play.SuspendLayout();
@@ -72,17 +72,17 @@
             // 
             // tablessTabControl1
             // 
-            this.tablessTabControl1.Controls.Add(this.Home);
-            this.tablessTabControl1.Controls.Add(this.SelectLevel);
-            this.tablessTabControl1.Controls.Add(this.Play);
-            this.tablessTabControl1.Controls.Add(this.Editor);
-            this.tablessTabControl1.Controls.Add(this.Help);
-            this.tablessTabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tablessTabControl1.Location = new System.Drawing.Point(0, 0);
-            this.tablessTabControl1.Name = "tablessTabControl1";
-            this.tablessTabControl1.SelectedIndex = 0;
-            this.tablessTabControl1.Size = new System.Drawing.Size(467, 576);
-            this.tablessTabControl1.TabIndex = 0;
+            this.tabControl1.Controls.Add(this.Home);
+            this.tabControl1.Controls.Add(this.SelectLevel);
+            this.tabControl1.Controls.Add(this.Play);
+            this.tabControl1.Controls.Add(this.Editor);
+            this.tabControl1.Controls.Add(this.Help);
+            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl1.Location = new System.Drawing.Point(0, 0);
+            this.tabControl1.Name = "tablessTabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(467, 576);
+            this.tabControl1.TabIndex = 0;
             // 
             // Home
             // 
@@ -373,11 +373,11 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(467, 576);
-            this.Controls.Add(this.tablessTabControl1);
+            this.Controls.Add(this.tabControl1);
             this.Name = "Form1";
             this.Text = "Bootstrap";
             this.Load += new System.EventHandler(this.Form1_Load);
-            this.tablessTabControl1.ResumeLayout(false);
+            this.tabControl1.ResumeLayout(false);
             this.Home.ResumeLayout(false);
             this.SelectLevel.ResumeLayout(false);
             this.SelectLevel.PerformLayout();
@@ -396,7 +396,7 @@
 
         #endregion
 
-        private TabControlWithoutHeader tablessTabControl1;
+        private TabControlWithoutHeader tabControl1;
         private System.Windows.Forms.TabPage Home;
         private System.Windows.Forms.TabPage SelectLevel;
         private System.Windows.Forms.TabPage Play;
@@ -423,5 +423,16 @@
         private System.Windows.Forms.Button BTNhelpback;
         private System.Windows.Forms.Button BTNselectBack;
         private System.Windows.Forms.Label LBLselectlevel;
+    }
+
+    class TabControlWithoutHeader : System.Windows.Forms.TabControl
+    {
+        protected override void WndProc(ref System.Windows.Forms.Message m)
+        {
+            if (m.Msg == 0x1328 && !DesignMode)
+                m.Result = (System.IntPtr)1;
+            else
+                base.WndProc(ref m);
+        }
     }
 }

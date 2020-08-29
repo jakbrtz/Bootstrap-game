@@ -67,21 +67,21 @@ namespace Bootstrap
                 }
                 flowLayoutPanel1.Controls.Add(newButton);
             }
-            tablessTabControl1.SelectTab("SelectLevel");
+            tabControl1.SelectTab("SelectLevel");
         }
 
         void SelectLevelToPlay(int levelIndex)
         {
             currentLevel = levelIndex;
             gameControl1.SetLevel(levels[currentLevel]);
-            tablessTabControl1.SelectTab("Play");
+            tabControl1.SelectTab("Play");
         }
 
         void SelectLevelToEdit(int levelIndex)
         {
             currentLevel = levelIndex;
             editorControl1.SetLevel(levels[currentLevel]);
-            tablessTabControl1.SelectTab("Editor");
+            tabControl1.SelectTab("Editor");
         }
 
         private void GameControl1_LevelWon(object sender, EventArgs e)
@@ -93,7 +93,7 @@ namespace Bootstrap
             catch
             {
                 currentLevel = 0;
-                tablessTabControl1.SelectTab("Home");
+                tabControl1.SelectTab("Home");
             }
         }
 
@@ -104,17 +104,17 @@ namespace Bootstrap
             else
                 levels[currentLevel] = e.levelData;
             File.WriteAllText("Levels.txt", string.Join("\r\n\r\n", levels));
-            tablessTabControl1.SelectTab("Home");
+            tabControl1.SelectTab("Home");
         }
 
         private void BackPressed(object sender, EventArgs e)
         {
-            tablessTabControl1.SelectTab("Home");
+            tabControl1.SelectTab("Home");
         }
 
         private void BTNhelp_Click(object sender, EventArgs e)
         {
-            tablessTabControl1.SelectTab("Help");
+            tabControl1.SelectTab("Help");
         }
     }
 }
