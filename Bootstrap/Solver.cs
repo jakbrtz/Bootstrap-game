@@ -7,6 +7,9 @@ namespace Bootstrap
 {
     static class Solver
     {
+        /// <summary>
+        /// Converts a list of instructions into a script that accounts for timing
+        /// </summary>
         public static AnswerScript GenerateScript(Level level, List<Instruction> selectedInstructions)
         {
             // 0.0 Figure out how many runs there are (count useTimeMachine)

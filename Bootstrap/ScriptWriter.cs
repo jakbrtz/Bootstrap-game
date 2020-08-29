@@ -4,6 +4,13 @@ namespace Bootstrap
 {
     static class ScriptWriter
     {
+        /// <summary>
+        /// Gets a list of actions that the user can take from their current position
+        /// </summary>
+        /// <param name="level">The level</param>
+        /// <param name="coordinate">Where the user is currently standing</param>
+        /// <param name="previousInstructions">A list of instructions that lead up to this point</param>
+        /// <returns></returns>
         public static List<Instruction> GetOptions(Level level, Coordinate coordinate, List<Instruction> previousInstructions)
         {
             int[] heldKeys = new int[level.Doors.Length];

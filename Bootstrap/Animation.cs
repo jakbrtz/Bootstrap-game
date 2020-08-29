@@ -12,7 +12,13 @@ namespace Bootstrap
 {
     static class Animation
     {
+        /// <summary>
+        /// The PictureBox that contains the level
+        /// </summary>
         public static PictureBox ImageBoard;
+        /// <summary>
+        /// The PictureBox thta contains the script that the user creates
+        /// </summary>
         public static PictureBox ImageInstructions;
 
         public static int rewindPause = 200;
@@ -52,6 +58,7 @@ namespace Bootstrap
             Properties.Resources.plate4,
         };
 
+        /// <param name="script">The answer that the user submitted for this level</param>
         public static void AnimateAnswer(Level level, AnswerScript script)
         {
             Stopwatch sw = new Stopwatch();
@@ -78,7 +85,7 @@ namespace Bootstrap
                 while (time > 0)
                 {
                     sw.Restart();
-                    ImageBoard.Image = DrawBoard(level, script, time, extraRun: run, rewind: true);
+                    ImageBoard.Image = DrawBoard(level, script, time, run: run, rewind: true);
                     DrawScript(script, time, run, true);
                     sw.Stop();
                     time -= rewindSpeed * sw.ElapsedMilliseconds / 1000;
@@ -88,7 +95,16 @@ namespace Bootstrap
             }
         }
 
-        public static Image DrawBoard(Level level, AnswerScript? script = null, float time = 0, int run = -1, Position? extraPlayer = null, int extraRun = -1, bool shadowStates = true, bool rewind = false)
+        /// <summary>
+        /// Animates a single frame of the level onto ImageBoard
+        /// </summary>
+        /// <param name="level">The level that is being displayed</param>
+        /// <param name="script">The answer that the user has submitted for this level</param>
+        /// <param name="time">What fram should be animated</param>
+        /// <param name="run">Which version of the player should be highlighted</param>
+        /// <param name="extraPlayer">Should an additional player be animated? If so, where?</param>
+        /// <param name="rewind">Is the animation rewinding?</param>
+        public static Image DrawBoard(Level level, AnswerScript? script = null, float time = 0, int run = -1, Position? extraPlayer = null, bool rewind = false)
         {
             Bitmap bmp = new Bitmap(level.Width * spriteSize * Level.cellSize + spriteSize, level.Height * spriteSize * Level.cellSize + spriteSize);
             List<Sprite> sprites = new List<Sprite>();
@@ -118,7 +134,7 @@ namespace Bootstrap
                 if (!extraPlayer.HasValue)
                     MakeSprite(level.Start, Properties.Resources.playerCurrent, Depth.playerCurrent);
             }
-            else if (shadowStates)
+            else
             {
                 for (int player = 0; player < script.Value.player.Length; player++)
                 {
@@ -143,7 +159,7 @@ namespace Bootstrap
                             y = (previous.Y * spriteSize) * nextFraction + (next.Y * spriteSize) * previousFraction;
                         }
 
-                        AddSprite(x, y, player == run ? Properties.Resources.playerCurrent : Properties.Resources.playerOther, player == run ? Depth.playerCurrent : Depth.playerOther);
+                        AddSprite(x, y, player == run && !rewind ? Properties.Resources.playerCurrent : Properties.Resources.playerOther, player == run ? Depth.playerCurrent : Depth.playerOther);
                     }
                 }
             }
@@ -153,9 +169,9 @@ namespace Bootstrap
                 MakeSprite(extraPlayer.Value, Properties.Resources.playerOther, Depth.playerCurrent);
             }
 
-            if (extraRun != -1 && script.HasValue)
+            if (run != -1 && rewind && script.HasValue)
             {
-                MakeSprite(script.Value.player[extraRun].Last().Value.position, Properties.Resources.playerCurrent, Depth.playerCurrent);
+                MakeSprite(script.Value.player[run].Last().Value.position, Properties.Resources.playerCurrent, Depth.playerCurrent);
             }
 
             //Keys
@@ -195,10 +211,10 @@ namespace Bootstrap
                 }
             }
 
-            if (extraRun != -1 && script.HasValue)
+            if (run != -1 && rewind && script.HasValue)
             {
                 foreach (SortedList<float, KeyState> keys in script.Value.keys)
-                    if (keys.Last().Value.holderIndex == extraRun)
+                    if (keys.Last().Value.holderIndex == run)
                         MakeSprite(keys.Last().Value.position, key[keys.Last().Value.colour], Depth.held);
             }
 
@@ -281,6 +297,13 @@ namespace Bootstrap
             return bmp;
         }
 
+        /// <summary>
+        /// Visually display the answer that the user submitted for this level
+        /// </summary>
+        /// <param name="script">The answer that the user submitted for this level</param>
+        /// <param name="highlightTime">Draw a vertical line that corresponds with this point in time</param>
+        /// <param name="highlightRun">Highlight a row that corresponds with this point in time</param>
+        /// <param name="showMistakes">Should X's be drawn where an action is not allowed</param>
         public static void DrawScript(AnswerScript script, float highlightTime, int highlightRun, bool showMistakes)
         {
             Bitmap bmp = new Bitmap((int)(1+script.duration * spriteSize), script.player.Length * spriteSize);
@@ -307,6 +330,9 @@ namespace Bootstrap
             GC.Collect();
         }
 
+        /// <summary>
+        /// Converts an instruction to an image that appears in the script
+        /// </summary>
         public static Image GetImage(this Instruction instruction)
         {
             switch (instruction.command)
@@ -341,6 +367,9 @@ namespace Bootstrap
             return null;
         }
 
+        /// <summary>
+        /// Draw an image on top of the ImageBoard
+        /// </summary>
         public static void AddBanner(Image image)
         {
             Graphics g = ImageBoard.CreateGraphics();
