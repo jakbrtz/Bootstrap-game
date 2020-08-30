@@ -160,6 +160,9 @@ namespace Bootstrap
                         }
 
                         AddSprite(x, y, player == run && !rewind ? Properties.Resources.playerCurrent : Properties.Resources.playerOther, player == run ? Depth.playerCurrent : Depth.playerOther);
+
+                        if (script.Value.mistakes[player].Any(mistake => 0 < time - mistake && time - mistake < 2))
+                            AddSprite(x, y, Properties.Resources.cross, Depth.held);
                     }
                 }
             }
