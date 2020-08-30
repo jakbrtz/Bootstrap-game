@@ -13,6 +13,8 @@ namespace Bootstrap
         /// <returns></returns>
         public static List<Instruction> GetOptions(Level level, Coordinate coordinate, List<Instruction> previousInstructions)
         {
+            if (previousInstructions.Count > 0 && previousInstructions[previousInstructions.Count - 1].command == Command.useGoal) return new List<Instruction>();
+
             int[] heldKeys = new int[level.Doors.Length];
             bool[] keysUsed = new bool[level.Doors.Length];
 
